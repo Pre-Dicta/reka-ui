@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<TagsInputInputProps>(), {
 const context = injectTagsInputRootContext()
 const { forwardRef, currentElement } = useForwardExpose()
 
-function handleBlur(event: Event) {
+function handleBlur(event: FocusEvent) {
   context.selectedElement.value = undefined
 
   if (!context.addOnBlur.value)
@@ -34,9 +34,17 @@ function handleBlur(event: Event) {
   if (!target.value)
     return
 
-  const isAdded = context.onAddValue(target.value)
-  if (isAdded)
-    target.value = ''
+  // Delay execution slightly to allow any pending click events (e.g., selecting from a dropdown) to complete
+  // This prevents a race condition where blur fires before the selection event when clicking dropdown items
+  setTimeout(() => {
+    // Re-check the value in case it was cleared by another event (e.g., a Combobox selection)
+    if (!target.value)
+      return
+
+    const isAdded = context.onAddValue(target.value)
+    if (isAdded)
+      target.value = ''
+  }, 10)
 }
 
 function handleTab(event: Event) {

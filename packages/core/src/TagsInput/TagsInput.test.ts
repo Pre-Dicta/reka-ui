@@ -4,6 +4,7 @@ import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { axe } from 'vitest-axe'
 import { nextTick } from 'vue'
+import { sleep } from '@/test'
 import TagsInput from './story/_TagsInput.vue'
 import TagsInputObject from './story/_TagsInputObject.vue'
 
@@ -170,6 +171,8 @@ describe('given default TagsInput', () => {
       await setValueInInput(tag)
 
       await input.trigger('blur')
+      // Wait for the setTimeout in handleBlur to complete
+      await sleep(15)
 
       tags = wrapper.findAll('[data-reka-collection-item]')
 
