@@ -86,6 +86,7 @@ provideListboxItemContext({
       :data-disabled="disabled ? '' : undefined"
       :data-highlighted="isHighlighted ? '' : undefined"
       :data-state="isSelected ? 'checked' : 'unchecked'"
+      @mousedown.prevent
       @click="handleSelectCustomEvent"
       @keydown.space.prevent="handleSelectCustomEvent"
       @pointermove="() => {
